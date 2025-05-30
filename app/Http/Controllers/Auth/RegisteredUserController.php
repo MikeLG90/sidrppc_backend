@@ -42,53 +42,54 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:usuarios,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'ape_materno' => ['required', 'string', 'max:255'],
+            'ape_paterno' => ['required', 'string', 'max:255'],
+            'genero' => ['required', 'string'],
+            'area_id' => ['required', 'integer', 'exists:areas,area_id'],
         ]);
-
-        $rol_id = 2;
-        $areaId = $request->area;
-
+    
+        // Crear el usuario
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'rol_id' => $rol_id,
+            'rol_id' => 2,
             'password' => Hash::make($request->password),
         ]);
-
+    
+        // Obtener el ID personalizado
         $userId = $user->usuario_id;
-
+    
+        // Crear la persona asociada
         $persona = new Persona;
-
         $persona->usuario_id = $userId;
         $persona->nombre = $request->name;
         $persona->ape_materno = $request->ape_materno;
         $persona->ape_paterno = $request->ape_paterno;
         $persona->sexo = $request->genero;
         $persona->save();
-
+    
+        // Obtener ID de la persona creada
         $personaId = $persona->persona_id;
-
-        $user = User::find($userId);
-        $area = Area::find($areaId);
-
+    
+        // Obtener el área
+        $area = Area::find($request->area_id);
+    
+        // Actualizar el usuario con la relación a persona, área y oficina
         $user->persona_id = $personaId;
         $user->area_id = $area->area_id;
         $user->oficina_id = $area->oficina_id;
         $user->save();
-
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-
-
-        return redirect(RouteServiceProvider::HOME);
+    
+        return response()->json([
+            'message' => 'Usuario registrado exitosamente',
+            'user' => $user
+        ], 201);
     }
 
     public function storeAdmin(Request $request): RedirectResponse

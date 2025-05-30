@@ -26,7 +26,8 @@ class Resolucion extends Model
         'prioridad',
         'descripcion',
         'file_path',
-        'estatus'
+        'estatus',
+        'tipo_resolucion'
         ];
 
     public function files()

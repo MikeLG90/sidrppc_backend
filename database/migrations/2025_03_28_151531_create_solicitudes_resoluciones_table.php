@@ -13,16 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('failed_jobs', function (Blueprint $table) {
+        Schema::create('solicitudes_resoluciones', function (Blueprint $table) {
             $table->id();
-            $table->string('uuid')->unique();
-            $table->text('connection');
-            $table->text('queue');
-            $table->longText('payload');
-            $table->longText('exception');
-            $table->timestamp('failed_at')->useCurrent();
+            $table->string('promovente');
+            $table->unsignedBigInteger('oficina_id');
+            $table->text('descripcion');
+            $table->timestamps();
+            
+            $table->foreign('oficina_id')->references('oficina_id')->on('oficinas')->onDelete('cascade');
         });
     }
+    
 
     /**
      * Reverse the migrations.
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('failed_jobs');
+        Schema::dropIfExists('solicitudes_resoluciones');
     }
 };

@@ -33,7 +33,7 @@ class UserController extends Controller
              'c.nombre as cabeza_sector')
     ->get();
 
-    return view('rppc.users', compact('usuarios', 'roles'));
+    return response()->json($usuarios);
     }
 
 
@@ -64,14 +64,24 @@ public function updateUser(Request $request)
     return back()->with('success', 'Usuario actualizado correctamente');
 }
 
-    public function cambioRol(Request $request, $userId) {
+public function cambioRolApi(Request $request, $userId)
+{
+    $user = User::find($userId);
 
-        $user = User::findOrFail(id: $userId);
-        $user->rol_id = $request->rol;
-        $user->save();
-        return back()->with('success', 'Usuario actualizado correctamente');
-
+    if (!$user) {
+        return response()->json(['error' => 'Usuario no encontrado'], 404);
     }
+
+    $validated = $request->validate([
+        'rol' => 'required|exists:roles,rol_id',
+    ]);
+
+    $user->rol_id = $validated['rol'];
+    $user->save();
+
+    return response()->json(['message' => 'Rol actualizado correctamente'], 200);
+}
+
     public function DatosUser()
     {
         $user = auth()->user(); // Intenta obtener el usuario autenticado
@@ -81,6 +91,11 @@ public function updateUser(Request $request)
         }
     
         return response()->json($user);
+    }
+
+    public function roles() {
+
+        return Rol::all();
     }
     
 }

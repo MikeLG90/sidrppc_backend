@@ -16,7 +16,7 @@ use App\Http\Controllers\LibroController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\EmailController;
-use App\Http\Controllers\GmailController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\WebServicesController;
 use App\Http\Controllers\CatastroApiController;
@@ -39,7 +39,7 @@ Route::post('/guardar/catastro', action: [CatastroApiController::class, 'store']
 Route::get('/consulta/catastro', action: [CatastroApiController::class, 'index']);
 
 
-Route::get('/send-test-email', [MailController::class, 'sendTestEmail']);
+Route::get('/send-test-email', [MailController::class, 'sendMail']);
 Route::get('/listado-resoluciones2', [ResolucionController::class,'index2']);
 
 
@@ -54,7 +54,6 @@ use App\Http\Controllers\TiffController;
 Route::get('/callback/google', [GoogleAuthController::class, 'callback']);
 Route::get('/enviar-correo', [EmailController::class, 'enviarCorreo']);
 
-Route::post('/send-email', [GmailController::class, 'sendEmail']);
 
 
 Route::post('/preview-tiff', [TiffController::class, 'previewTiff'])->name('preview-tiff');

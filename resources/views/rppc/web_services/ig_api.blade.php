@@ -18,6 +18,7 @@
       cursor: pointer; /* Cambia el cursor a un puntero */
       }
    </style>
+   
    </x-slot>
    <!-- END GLOBAL MANDATORY STYLES -->
    <style>
@@ -53,7 +54,7 @@
                <div class="input-group mb-4">
                   <span class="input-group-text">Municipio</span>
                   <select class="form-control form-control-lg" id="municipio">
-                     <option value="1">Cozumel</option>
+                  <option value="1">Cozumel</option>
                      <option value="2">Felipe Carrillo Puerto</option>
                      <option value="3">Isla Mujeres</option>
                      <option value="4">Othón P. Blanco</option>

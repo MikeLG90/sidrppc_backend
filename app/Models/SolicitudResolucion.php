@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class SolicitudResolucion extends Model
 {
     use HasFactory;
-    protected $table = 'solicitud_res';
-    protected $primaryKey = 'solicitud_res_id	';
+    protected $table = 'solicitudes_resoluciones';
+    protected $fillable = ['promovente', 'oficina_id', 'descripcion'];
 
-    protected $fillable = ['resolucion_id', 'file_path'];
+    public function archivos()
+    {
+        return $this->hasMany(ArchivoSolicitud::class, 'solicitud_id');
+    }
 }

@@ -13,17 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('personal_access_tokens', function (Blueprint $table) {
+        Schema::create('archivos_solicitudes', function (Blueprint $table) {
             $table->id();
-            $table->morphs('tokenable');
-            $table->string('name');
-            $table->string('token', 64)->unique();
-            $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->unsignedBigInteger('solicitud_id');
+            $table->string('file_path');
             $table->timestamps();
+            
+            $table->foreign('solicitud_id')->references('id')->on('solicitudes_resoluciones')->onDelete('cascade');
         });
     }
+    
 
     /**
      * Reverse the migrations.
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('archivos_solicitudes');
     }
 };

@@ -92,4 +92,30 @@ class TiffController extends Controller
         ];
         return "{$baseDir}\\{$locations[$oficinaId]}\\{$fileName}";
     }
+
+    public function viewBookimg($nombre_documento, $libro_id, $oficina_id)
+    {
+        $localpath = $this->getdireccionLocal($nombre_documento, $libro_id, $oficina_id);
+
+        if (!file_exists($localpath)) {
+            return response('Archivo no encontrado', 400);
+        }
+
+        return response()->file($localpath, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+    private function getdireccionLocal($nombre_documento, $libro_id, $oficina_id)
+    {
+        $direccion_base = "\\\\172.16.0.175\\direccion_tics\\Libros_PDF";
+        $locaciones = [
+            1 => 'Chetumal',
+            2 => 'Cancun',
+            3 => 'Playa',
+            4 => 'Cozumel'
+        ];
+
+        return "{$direccion_base}\\{$locaciones[$oficina_id]}\\{$libro_id}\\{$nombre_documento}";
+    }
 }
